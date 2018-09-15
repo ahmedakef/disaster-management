@@ -28,7 +28,9 @@ class Disaster(models.Model):
 	added = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
 	owner = models.ForeignKey('auth.User', related_name='posts', on_delete=models.CASCADE)
-	
+	lat			= models.FloatField()
+	lang		= models.FloatField()
+
 	#optional
 	title = models.CharField(max_length=200, blank = True)
 	description = models.CharField(max_length=500, blank = True)

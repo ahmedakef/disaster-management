@@ -10,5 +10,5 @@ class DisasterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Disaster
-        fields = ('diameter', 'center_point','level_of_danger','created','owner','title', 'description')
+        fields = ('id','diameter', 'lat','lang','level_of_danger','created','owner','title', 'description')
         depth  = 1 # generate nested representations
