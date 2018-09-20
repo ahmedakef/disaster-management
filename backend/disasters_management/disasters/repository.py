@@ -46,7 +46,7 @@ class DisasterRepository(object):
                 'disaster'  :   self.disaster,
                 "lat"   : self.disaster.get("lat"),
                 "lang"   : self.disaster.get("lang"),
-                "site_name" :   "disaster_management.com"
+                "site_name" :   "https://akef-test-ibm.eu-gb.mybluemix.net"
                 }
             subject_template_name = 'auth/subject.txt'
             organizations_email_template_name = 'auth/disaster_email_to_organizations.html'
