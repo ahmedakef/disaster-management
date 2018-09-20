@@ -14,7 +14,7 @@ class DisasterRepository(object):
         self.diameter = disaster.get("diameter")
 
 
-    def send_nearest_email(self):
+    def get_nearest_accounts(self):
 
         near_accounts = Account.objects.mongo_find(
             {
@@ -22,14 +22,24 @@ class DisasterRepository(object):
                 { "$near":
                     {
                         "$geometry": { "type": "Point",  "coordinates": [ self.lang, self.lat ] },
-                        "$maxDistance": self.diameter + 1000
+                        "$maxDistance": self.diameter + 10000
                     }
                 }
             }
         )
 
+        accounts_instances = list()
         for account in near_accounts:
-            account = Account.objects.get(id = account.get("id"))
+            accounts_instances.append(Account.objects.get(id = account.get("id")))
+        
+        return accounts_instances
+
+
+    def send_nearest_email(self):
+
+        near_accounts = self.get_nearest_accounts()
+
+        for account in near_accounts:
             context = {
                 'email': account.user.email,
                 'user': account.user,
