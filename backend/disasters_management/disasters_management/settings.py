@@ -25,7 +25,7 @@ SECRET_KEY = 'v5iw6(522dxf4z6)gruv-2v%-vseb&xii_0&#_u^$agg2-rp$v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["akef-test-ibm.eu-gb.mybluemix.net", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -76,13 +76,20 @@ WSGI_APPLICATION = 'disasters_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-       'default': {
-           'ENGINE': 'djongo',
-           'NAME': 'disaster_management',
-       }
-   }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'ENFORCE_SCHEMA': True,
+        'NAME': 'disaster_management',
+        'HOST': 'portal-ssl331-14.bmix-lon-yp-af5edb72-e112-493f-ad38-ea9fdbfb13ca.1903225298.composedb.com',
+        'PORT': 29386,
+        'USER': 'admin',
+        'PASSWORD': 'NCNJIMSOPLCVZINI',
+        'AUTH_SOURCE': 'admin',
+        'SSL': True,
+    }
+}
 
 
 # Password validation
@@ -122,6 +129,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = "/var/www/static/"
+
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -131,11 +142,19 @@ REST_FRAMEWORK = {
     )
 }
 
-# Don't forget to put your credentials and turn on less security apps here :
-# https://www.google.com/settings/security/lesssecureapps
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'test@gmail.com'
-EMAIL_HOST_PASSWORD = 'test'
-EMAIL_PORT = 587
+
+# Email
+
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+
+
+import datetime
+JWT_AUTH = {
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=1800),
+}
+

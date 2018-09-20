@@ -1,0 +1,1 @@
+web: gunicorn disasters_management.wsgi — workers 2

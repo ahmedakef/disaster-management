@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
 from rest_framework import permissions, viewsets
 
-from disasters.models import Disaster, GeoJSON
 from disasters.permissions import IsOwnerOrReadOnly
 from disasters.serializers import DisasterSerializer
 from rest_framework.response import Response
 
+from disasters.models import Disaster
+from disasters.repository import DisasterRepository
 
 class DisasterViewSet(viewsets.ModelViewSet):
     """
@@ -25,13 +26,15 @@ class DisasterViewSet(viewsets.ModelViewSet):
 
         return disasters
 
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        
+        disaster_repository = DisasterRepository(response.data)
+        disaster_repository.send_nearest_email()
+
+        return  response
 
     def perform_create(self, serializer):
-        lat = self.request.data.get("lat")
-        lang = self.request.data.get("lang")
-        center_point = {
-            "type"          :   "Point",
-            "coordinates"   :   [lat, lang]  
-        }
-        point = GeoJSON(**center_point)
-        serializer.save(owner=self.request.user, center_point = point)
+        
+        serializer.save(owner=self.request.user)
+

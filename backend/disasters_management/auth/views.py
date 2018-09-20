@@ -14,6 +14,8 @@ from rest_framework import permissions
 from rest_framework import status
 from auth.serializers import *
 
+from auth.models import Account
+from disasters.helpers import create_point
 
 class UserRegister(generics.CreateAPIView):
     """
@@ -22,6 +24,19 @@ class UserRegister(generics.CreateAPIView):
     """
 
     serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        lat  = self.request.data.get("lat")
+        lang = self.request.data.get("lang")
+        account_data = {
+            "phone" : self.request.data.get("phone"),
+            "type"  : self.request.data.get("type"),
+            "lang"  : lang,
+            "lat"   : lat,
+            "center_point" : create_point(lang, lat),
+        }
+        serializer.save(**account_data)
+
 
 
 class UserChangePassword(APIView):

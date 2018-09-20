@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from auth.models import Account
+from auth.models import Account, GeoJSON
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
@@ -13,13 +13,27 @@ class UserSerializer(serializers.ModelSerializer):
         """
         Create and return a new `User` instance, given the validated data.
         """
-        user = User.objects.create_user(**validated_data)
+
+        user_data = {
+            "username"  :   validated_data.get("username"),
+            "email"     :   validated_data.get("email"),
+            "password"  :   validated_data.get("password")
+        }
+        user = User.objects.create_user(**user_data)
         user.save()
 
-        phone = validated_data.get("phone")
-        account = Account(user = user,phone = phone)
+        account_data = {
+            "phone"         :   validated_data.get("phone"),
+            "type"          :   validated_data.get("type"),
+            "lat"           :   validated_data.get("lat"),
+            "lang"          :   validated_data.get("lang"),
+            "center_point"  :   validated_data.get("center_point")
+        }
+        account = Account(user = user, **account_data)
         account.save()
+
         return user
+
 
     def validate_password(self, value):
         validate_password(value)
