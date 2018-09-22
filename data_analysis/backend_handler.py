@@ -35,6 +35,16 @@ class BackendHandler(object):
         response = requests.post(url,json = payload, headers=headers)
         return response.json()
 
+
+
+# DANGER_LEVELS = (
+#     ('E', 'Easy'),
+#     ('M', 'Medium'),
+#     ('D', 'Danger'),
+#     ('ED', 'Extra Danger')
+# )
+
+
 if __name__ == "__main__":
     disaster = {
         "diameter": 30,
