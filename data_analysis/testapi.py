@@ -13,7 +13,7 @@ json_data = req.get(url).json()
 
 
 for each in json_data["list"]:
-    print(each["main"]["temp_min"][1])
+    print(each["main"]["temp_min"])
     print(each["main"]["temp_max"])
     print(each["main"]["sea_level"])
     print(each["wind"]["speed"])
