@@ -1,5 +1,5 @@
 import urllib3, requests, json
-import testapi as api 
+ 
 
 
 # retrieve your wml_service_credentials_username, wml_service_credentials_password, and wml_service_credentials_url from the
