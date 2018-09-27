@@ -36,21 +36,14 @@ for value in parsed['values']:
 
 if prediction > 0.5:
   disaster = {
-        #"diameter": 30,
-        #"level_of_danger": "D",
+        "diameter": 1000,
+        "level_of_danger": "D",
         "lat"	:	APIweatherFinal.lat,
         "lang"	:	APIweatherFinal.lon
     }
   response = BackendHandler.create_disaster(**disaster)
   print(response)
 
-'''parsed = json.loads(response_scoring.text)
-#print(len(payload_scoring))
-for value in parsed['values']:
-    fields = value[:30]
-    #confidence = value[32]
-    prediction = value[13]
-    values = value[:]
-    print("\n Prediction of flood: {}\n\tprediction: {}\n\tFields {}".format(prediction,zip(prediction, values), fields) )'''
+
 
  
