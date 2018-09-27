@@ -2,42 +2,6 @@ import urllib3, requests, json
 import APIweatherFinal
 from backend_handler import BackendHandler  
 
-   ## API Weather ##
-import requests 
-from pprint import pprint
-import json
-
-
-
-api_address='https://samples.openweathermap.org/data/2.5/weather?lat={}&lon={}&appid=b6907d289e10d714a6e88b30761fae22'
-
-
-lat = input("latitude of the city: ")
-lat=float(lat)
-lon = input("longtuide of the city: ")
-lon=float(lon)
-state = ""
-if (lat== 41.619549 and lon==-93.598022) or (lat== 43.002316 and lon==-89.424095) or (lat== 40.666149 and  lon== -89.580101) or (lat== 45.560230 and lon==-94.172852):
-    
-    if lat== 41.619549 and lon==-93.598022:
-        state='IA'
-    elif   lat== 43.002316 and lon==-89.424095 :
-        state='WI'
-    elif  lat== 40.666149 and lon== -89.580101:
-        state='IL'   
-    elif  lat== 45.560230 and lon==-94.172852:
-        state='MN'
-    
-    url = api_address.format( lat, lon)
-
-    json_data = requests.get(url).json()
- 
-    min_temp = json_data['main']["temp_min"]
-    max_temp = json_data['main']["temp_max"]
-    sea_level = json_data['main']["sea_level"]
-    wind_speed = json_data['wind']["speed"]
-else :exit
-
 # retrieve your wml_service_credentials_username, wml_service_credentials_password, and wml_service_credentials_url from the
 # Service credentials associated with your IBM Cloud Watson Machine Learning Service instance
 
@@ -56,9 +20,9 @@ header = {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + mltok
 
 # NOTE: manually define and pass the array(s) of values to be scored in the next line
 
-array_of_values_to_be_scored = [state, None , min_temp, max_temp, sea_level, None , None,  None, wind_speed, None ]
-another_array_of_values_to_be_scored =  ['IA','6/11/1953',71.1,88,30.1,71.3,0,8.1,12.08,17.26]
 
+array_of_values_to_be_scored = [APIweatherFinal.state, None , APIweatherFinal.min_temp, APIweatherFinal.max_temp, APIweatherFinal.sea_level, None , None,  None, APIweatherFinal.wind_speed, None ]
+another_array_of_values_to_be_scored = [APIweatherFinal.state, None , APIweatherFinal.min_temp, APIweatherFinal.max_temp, APIweatherFinal.sea_level, None , None,  None, APIweatherFinal.wind_speed, None ]
 payload_scoring = {"fields": ["State", "Start Date", "min temperature(F)", "max temperature(F)", "Mean sea level pressure(IN)", "mean dew point(F)", "Total precipitation(IN)", "visibility(MI)", "Mean wind speed(MPH)", "max sustained wind speed(MPH)"], "values": [array_of_values_to_be_scored, another_array_of_values_to_be_scored]}
 
 response_scoring = requests.post('https://us-south.ml.cloud.ibm.com/v3/wml_instances/e57f2229-3fda-4e56-a902-f746bcbe466a/deployments/72bd12f3-ee64-4d33-9034-28f3f611aab6/online', json=payload_scoring, headers=header)
@@ -74,8 +38,8 @@ if prediction > 0.5:
   disaster = {
         #"diameter": 30,
         #"level_of_danger": "D",
-        "lat"	:	lat,
-        "lang"	:	lon
+        "lat"	:	APIweatherFinal.lat,
+        "lang"	:	APIweatherFinal.lon
     }
   response = BackendHandler.create_disaster(**disaster)
   print(response)
